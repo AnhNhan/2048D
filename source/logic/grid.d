@@ -1,4 +1,3 @@
-
 module logic.grid;
 
 import logic.common;
@@ -91,18 +90,40 @@ private:
 
     auto move(MoveDirection direction)()
     {
+        auto tiles = _tiles;
         static if (direction == MoveDirection.Up)
         {
+            tiles = tiles.rotateCW(180);
         }
+        else static if (direction == MoveDirection.Left)
+        {
+            tiles = tiles.rotateCW(270);
+        }
+        else static if (direction == MoveDirection.Right)
+        {
+            tiles = tiles.rotateCW(90);
+        }
+        
+        // Everything is rotated so we only have to move the tiles down
+        // TODO: Actually move the tiles
+        
+        // Rotate the tiles again
+        static if (direction == MoveDirection.Up)
+        {
+            tiles = tiles.rotateCW(180);
+        }
+        else static if (direction == MoveDirection.Left)
+        {
+            tiles = tiles.rotateCW(90);
+        }
+        else static if (direction == MoveDirection.Right)
+        {
+            tiles = tiles.rotateCW(270);
+        }
+        _tiles = tiles;
 
         placeNextRandomTile();
     }
-
-    auto moveVertical(bool isUp)()
-    {}
-
-    auto moveHorizontal(bool isRight)()
-    {}
 
     T[size_y][size_x] _tiles;
     Random _rng;
@@ -154,34 +175,6 @@ unittest {
     writeln("  Moving left.");
     g1.moveLeft();
     g1.tiles.print();
-
-    writeln("Done.\n");
-}
-
-class Tile(T)
-{
-public:
-
-    this(uint id, T val)
-    {
-        _id = id;
-        _value = val;
-    }
-
-    @property auto id() const { return _id; }
-    @property auto value() const { return _value; }
-
-private:
-    T _value;
-    immutable uint _id;
-}
-
-unittest {
-    writeln("logic.grid.Tile.");
-
-    auto t1 = new Tile!int(1, 42);
-    assert(t1.id == 1);
-    assert(t1.value == 42);
 
     writeln("Done.\n");
 }
