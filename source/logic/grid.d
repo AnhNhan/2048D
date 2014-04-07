@@ -93,15 +93,15 @@ private:
         auto tiles = _tiles;
         static if (direction == MoveDirection.Up)
         {
-            tiles = tiles.rotateCW(180);
+            tiles = tiles.rotate90CW(2);
         }
         else static if (direction == MoveDirection.Left)
         {
-            tiles = tiles.rotateCW(270);
+            tiles = tiles.rotate90CW(3);
         }
         else static if (direction == MoveDirection.Right)
         {
-            tiles = tiles.rotateCW(90);
+            tiles = tiles.rotate90CW;
         }
         
         // Everything is rotated so we only have to move the tiles down
@@ -110,15 +110,15 @@ private:
         // Rotate the tiles again
         static if (direction == MoveDirection.Up)
         {
-            tiles = tiles.rotateCW(180);
+            tiles = tiles.rotate90CW(2);
         }
         else static if (direction == MoveDirection.Left)
         {
-            tiles = tiles.rotateCW(90);
+            tiles = tiles.rotate90CW;
         }
         else static if (direction == MoveDirection.Right)
         {
-            tiles = tiles.rotateCW(270);
+            tiles = tiles.rotate90CW(3);
         }
         _tiles = tiles;
 
@@ -177,6 +177,20 @@ unittest {
     g1.tiles.print();
 
     writeln("Done.\n");
+}
+
+// Rotation function
+
+import std.traits : isArray;
+
+auto rotate90CW(G)(G grid, uint times = 1)
+    if (isArray!G)
+{
+    //
+}
+
+unittest {
+
 }
 
 // RNG helper functions
