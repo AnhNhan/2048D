@@ -133,14 +133,35 @@ private:
 version(unittest) {
     void print(T : int[][])(T tiles)
     {
-        foreach (row; tiles)
+        string[][] stringified_grid;
+        int max_length;
+
+        stringified_grid.length = tiles.length;
+
+        foreach (rr, row; tiles)
+        {
+            import std.algorithm : max, reduce;
+            import std.conv : to;
+
+            foreach (cell; row)
+            {
+                stringified_grid[rr] ~= to!string(cell);
+            }
+
+            max_length = max(max_length, reduce!((a, b) { return max(a, b.length); })(0, stringified_grid[rr]));
+        }
+
+        foreach (row; stringified_grid)
         {
             // Line padding
             write("    ");
 
             foreach (cell; row)
             {
-                write(cell, " ");
+                import std.array : join, replicate;
+                auto padding_length = max_length - cell.length;
+                auto padding = [" "].replicate(padding_length).join;
+                write(padding ~ cell, " ");
             }
             writeln("");
         }
