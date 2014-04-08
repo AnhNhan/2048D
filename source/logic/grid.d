@@ -164,17 +164,61 @@ unittest {
     g1.placeNextRandomTile();
     g1.tiles.print();
 
-    writeln("  Moving down.");
-    g1.moveDown();
-    g1.tiles.print();
+    void move(MoveDirection d)
+    {
+        switch (d)
+        {
+            case MoveDirection.Down:
+                writeln("  Moving down.");
+                g1.moveDown();
+                break;
+            case MoveDirection.Left:
+                writeln("  Moving left.");
+                g1.moveLeft();
+                break;
+            case MoveDirection.Right:
+                writeln("  Moving right.");
+                g1.moveRight();
+                break;
+            case MoveDirection.Up:
+                writeln("  Moving up.");
+                g1.moveUp();
+                break;
+            default:
+                assert(0, "Unknown case");
+                break;
+        }
 
-    writeln("  Moving down.");
-    g1.moveDown();
-    g1.tiles.print();
+        g1.tiles.print;
+    }
 
-    writeln("  Moving left.");
-    g1.moveLeft();
-    g1.tiles.print();
+    auto left  = MoveDirection.Left;
+    auto down  = MoveDirection.Down;
+    auto right = MoveDirection.Right;
+    auto up    = MoveDirection.Up;
+
+    move(down);
+    move(down);
+    move(left);
+    move(left);
+    move(left);
+    move(up);
+    move(left);
+    move(up);
+    move(left);
+    move(up);
+    move(up);
+    move(left);
+    move(up);
+    move(left);
+    move(up);
+    move(left);
+    move(left);
+    move(left);
+    move(up);
+    move(up);
+    move(left);
+    move(up);
 
     writeln("Done.\n");
 }
