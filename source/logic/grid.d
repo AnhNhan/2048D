@@ -38,7 +38,7 @@ public:
     // Dunno, make this private?
     bool placeNextRandomTile()
     {
-        Position[] empty_tiles;
+        immutable(Position)[] empty_tiles;
         foreach (x, row; _tiles)
         {
             foreach (y, cell; row)
@@ -105,7 +105,21 @@ private:
         }
 
         // Everything is rotated so we only have to move the tiles down
-        // TODO: Actually move the tiles
+        foreach (_; 0.._move_repeat_times) // Repeat _move_repeat_times times to make sure we can merge stuff that gets opened by this loop
+        for (int rr = size_y - 1; rr >= 0; --rr)
+        {
+            for (int cc; cc < size_x; ++cc)
+            {
+                if (rr == size_y - 1)
+                    continue;
+
+                if (tiles[rr + 1][cc] == tiles[rr][cc] || tiles[rr + 1][cc] == T.init)
+                {
+                    tiles[rr + 1][cc] += tiles[rr][cc];
+                    tiles[rr][cc] = T.init;
+                }
+            }
+        }
 
         // Rotate the tiles again
         static if (direction == MoveDirection.Up)
@@ -124,6 +138,8 @@ private:
 
         placeNextRandomTile();
     }
+
+    enum _move_repeat_times = 20;
 
     T[size_y][size_x] _tiles;
     Random _rng;
