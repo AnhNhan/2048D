@@ -146,43 +146,42 @@ private:
     uint _seed;
 }
 
-version(unittest) {
-    void print(T : int[][])(T tiles)
+void print(T : int[][])(T tiles)
+{
+    import std.algorithm : min, max, reduce;
+    import std.array : join, replicate;
+    import std.conv : to;
+    import std.stdio : write, writeln;
+
+    string[][] stringified_grid;
+    static immutable int max_length = 5;
+
+    stringified_grid.length = tiles.length;
+
+    foreach (rr, row; tiles)
     {
-        string[][] stringified_grid;
-        int max_length;
-
-        stringified_grid.length = tiles.length;
-
-        foreach (rr, row; tiles)
+        foreach (cell; row)
         {
-            import std.algorithm : max, reduce;
-            import std.conv : to;
-
-            foreach (cell; row)
-            {
-                stringified_grid[rr] ~= to!string(cell);
-            }
-
-            max_length = max(max_length, reduce!((a, b) { return max(a, b.length); })(0, stringified_grid[rr]));
+            stringified_grid[rr] ~= to!string(cell);
         }
 
-        foreach (row; stringified_grid)
-        {
-            // Line padding
-            write("    ");
-
-            foreach (cell; row)
-            {
-                import std.array : join, replicate;
-                auto padding_length = max_length - cell.length;
-                auto padding = [" "].replicate(padding_length).join;
-                write(padding ~ cell, " ");
-            }
-            writeln("");
-        }
-        writeln("");
+        //max_length = max(max_length, reduce!((a, b) { return max(a, b.length); })(0, stringified_grid[rr]));
     }
+
+    foreach (row; stringified_grid)
+    {
+        // Line padding
+        write("    ");
+
+        foreach (cell; row)
+        {
+            auto padding_length = max_length - cell.length;
+            auto padding = [" "].replicate(padding_length).join;
+            write(padding ~ cell, " ");
+        }
+        writeln("\n");
+    }
+    writeln("");
 }
 
 unittest {
