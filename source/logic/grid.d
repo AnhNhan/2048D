@@ -39,9 +39,9 @@ public:
     bool placeNextRandomTile()
     {
         immutable(Position)[] empty_tiles;
-        foreach (x, row; _tiles)
+        foreach (y, row; _tiles)
         {
-            foreach (y, cell; row)
+            foreach (x, cell; row)
             {
                 if (cell == cell.init)
                 {
