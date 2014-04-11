@@ -328,6 +328,40 @@ unittest {
     assert(g1.rotate90CW.rotate90CW.rotate90CW.rotate90CW == g1);
     assert(g1.rotate90CW.rotate90CW.rotate90CW.rotate90CW == g1.rotate90CW(4));
 
+    writeln("  Performance check.");
+
+    import std.datetime : StopWatch;
+
+    StopWatch w;
+
+    w.start();
+    for (int ii = 0; ii < 1000000; ++ii)
+    {
+        g1.rotate90CW;
+    }
+    w.stop();
+    writeln("    rotate90CW() took ", w.peek.msecs, "ms");
+
+    w.reset();
+
+    w.start();
+    for (int ii = 0; ii < 1000000; ++ii)
+    {
+        g1.rotate90CW(4);
+    }
+    w.stop();
+    writeln("    rotate90CW(4) took ", w.peek.msecs, "ms");
+
+    w.reset();
+
+    w.start();
+    for (int ii = 0; ii < 1000000; ++ii)
+    {
+        g1.rotate90CW.rotate90CW.rotate90CW.rotate90CW;
+    }
+    w.stop();
+    writeln("    rotate90CW.rotate90CW.rotate90CW.rotate90CW took ", w.peek.msecs, "ms");
+
     writeln("Done.\n");
 }
 
