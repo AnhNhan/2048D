@@ -141,12 +141,14 @@ private:
 
     enum _move_repeat_times = 20;
 
-    T[size_y][size_x] _tiles;
+    alias GridType = T[size_y][size_x];
+
+    GridType _tiles;
     Random _rng;
     uint _seed;
 }
 
-void print(T : int[][])(T tiles)
+void print(T : int[][], char spacing_char = '.', char tween_cell_char = ' ')(T tiles)
 {
     import std.algorithm : min, max, reduce;
     import std.array : join, replicate;
@@ -176,8 +178,8 @@ void print(T : int[][])(T tiles)
         foreach (cell; row)
         {
             auto padding_length = max_length - cell.length;
-            auto padding = [" "].replicate(padding_length).join;
-            write(padding ~ cell, " ");
+            auto padding = [[spacing_char]].replicate(padding_length).join;
+            write(padding ~ cell, tween_cell_char);
         }
         writeln("\n");
     }
