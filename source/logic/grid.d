@@ -134,9 +134,24 @@ private:
         {
             tiles = tiles.rotate90CW(3);
         }
+
+        // Ineffective action?
+        if (_tiles == tiles)
+        {
+            debug
+            {
+                import std.stdio : writeln;
+                writeln("That was an ineffective action. Just sayin'.");
+            }
+            return;
+        }
+
         _tiles = tiles;
 
-        placeNextRandomTile();
+        auto new_tile_placed = placeNextRandomTile();
+        // Sanity check. placeNextRandomTile() has been fixed, but check that it
+        // worked anyway.
+        assert(new_tile_placed && _tiles != tiles, "placeNextRandomTile() was ineffective! No random tile was placed.");
     }
 
     enum _move_repeat_times = 20;
