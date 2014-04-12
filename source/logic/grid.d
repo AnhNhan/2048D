@@ -104,22 +104,52 @@ private:
             tiles = tiles.rotate90CW;
         }
 
-        // Everything is rotated so we only have to move the tiles down
-        foreach (_; 0.._move_repeat_times) // Repeat _move_repeat_times times to make sure we can merge stuff that gets opened by this loop
-        for (int rr = size_y - 1; rr >= 0; --rr)
-        {
-            for (int cc; cc < size_x; ++cc)
-            {
-                if (rr == size_y - 1)
-                    continue;
+        // Everything is rotated so we only have to code the move for a single
+        // direction, which makes it a lot easier.
 
-                if (tiles[rr + 1][cc] == tiles[rr][cc] || tiles[rr + 1][cc] == T.init)
+        pure @safe nothrow
+        GridType move_row_cell(in GridType t, int rr, int cc)
+        {
+            GridType r = t;
+            if (r[rr + 1][cc] == T.init)
+            {
+                r[rr + 1][cc] += r[rr][cc];
+                r[rr][cc] = T.init;
+            }
+            return r;
+        }
+
+        pure @safe nothrow
+        GridType merge_row_cell(in GridType t, int rr, int cc)
+        {
+            GridType r = t;
+            if (r[rr + 1][cc] == r[rr][cc])
+            {
+                r[rr + 1][cc] += r[rr][cc];
+                r[rr][cc] = T.init;
+            }
+            return r;
+        }
+
+        void loop_grid_iterate(GridType delegate(in GridType, int, int) pure f)
+        {
+            for (int rr = size_y - 1; rr >= 0; --rr)
+            {
+                for (int cc; cc < size_x; ++cc)
                 {
-                    tiles[rr + 1][cc] += tiles[rr][cc];
-                    tiles[rr][cc] = T.init;
+                    if (rr == size_y - 1)
+                        continue;
+
+                    tiles = f(tiles, rr, cc);
                 }
             }
         }
+
+        auto loop_loop_grid_iterate_move = { foreach (_; 0.._move_repeat_times) loop_grid_iterate(&move_row_cell); };
+
+        loop_loop_grid_iterate_move();
+        loop_grid_iterate(&merge_row_cell);
+        loop_loop_grid_iterate_move();
 
         // Rotate the tiles again
         static if (direction == MoveDirection.Up)
@@ -154,7 +184,7 @@ private:
         assert(new_tile_placed && _tiles != tiles, "placeNextRandomTile() was ineffective! No random tile was placed.");
     }
 
-    enum _move_repeat_times = 20;
+    enum _move_repeat_times = 10;
 
     alias GridType = T[size_y][size_x];
 
