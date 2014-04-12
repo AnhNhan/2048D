@@ -1,6 +1,7 @@
 module logic.grid;
 
 import logic.common;
+import utils.random;
 
 import std.random : Random;
 import std.traits : isIntegral;
@@ -410,17 +411,4 @@ unittest {
     writeln("    rotate90CW.rotate90CW.rotate90CW.rotate90CW took ", w.peek.msecs, "ms");
 
     writeln("Done.\n");
-}
-
-// RNG helper functions
-
-private auto uniform(V1, V2)(ref Random rng, V1 start, V2 end)
-{
-    import std.random : std_uniform = uniform;
-    return std_uniform(start, end, rng);
-}
-
-private auto pick_random(T)(ref Random rng, T[] array)
-{
-    return array[rng.uniform(0, array.length)];
 }
