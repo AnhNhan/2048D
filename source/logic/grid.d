@@ -378,37 +378,24 @@ unittest {
 
     writeln("  Performance check.");
 
-    import std.datetime : StopWatch;
-
-    StopWatch w;
-
-    w.start();
-    for (int ii = 0; ii < 1000000; ++ii)
+    void check_perf(void delegate() f, string name)
     {
-        g1.rotate90CW;
+        import std.datetime : StopWatch;
+
+        StopWatch w;
+
+        w.start();
+        for (int ii = 0; ii < 1000000; ++ii)
+        {
+            f();
+        }
+        w.stop();
+        writeln("    ", name, " took ", w.peek.msecs, "ms");
     }
-    w.stop();
-    writeln("    rotate90CW() took ", w.peek.msecs, "ms");
 
-    w.reset();
-
-    w.start();
-    for (int ii = 0; ii < 1000000; ++ii)
-    {
-        g1.rotate90CW(4);
-    }
-    w.stop();
-    writeln("    rotate90CW(4) took ", w.peek.msecs, "ms");
-
-    w.reset();
-
-    w.start();
-    for (int ii = 0; ii < 1000000; ++ii)
-    {
-        g1.rotate90CW.rotate90CW.rotate90CW.rotate90CW;
-    }
-    w.stop();
-    writeln("    rotate90CW.rotate90CW.rotate90CW.rotate90CW took ", w.peek.msecs, "ms");
+    check_perf({ g1.rotate90CW; }, "rotate90CW()");
+    check_perf({ g1.rotate90CW(4); }, "rotate90CW(4)");
+    check_perf({ g1.rotate90CW.rotate90CW.rotate90CW.rotate90CW; }, "g1.rotate90CW.rotate90CW.rotate90CW.rotate90CW");
 
     writeln("Done.\n");
 }
