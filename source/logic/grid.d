@@ -195,7 +195,7 @@ private:
     uint _seed;
 }
 
-void print(T : int[][], char spacing_char = '.', char tween_cell_char = ' ')(T tiles)
+void print(T : int[][], char spacing_char = ' ', char tween_cell_char = ' ')(T tiles)
 {
     import std.algorithm : min, max, reduce;
     import std.array : join, replicate;
@@ -228,7 +228,7 @@ void print(T : int[][], char spacing_char = '.', char tween_cell_char = ' ')(T t
             auto padding = [[spacing_char]].replicate(padding_length).join;
             write(padding ~ cell, tween_cell_char);
         }
-        writeln("\n");
+        writeln("\n\n");
     }
     writeln("");
 }
