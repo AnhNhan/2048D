@@ -86,8 +86,8 @@ private:
 
     auto nextRandomTileValue()
     {
-        // Hopefully 25% for a 4
-        return _rng.uniform(0, 4) == 0 ? 4 : 2;
+        // One in nine is a four
+        return _rng.uniform(0, 8) == 0 ? 4 : 2;
     }
 
     auto move(MoveDirection direction)()
