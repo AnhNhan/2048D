@@ -213,8 +213,6 @@ void print(T : int[][], char spacing_char = ' ', char tween_cell_char = ' ')(T t
         {
             stringified_grid[rr] ~= to!string(cell);
         }
-
-        //max_length = max(max_length, reduce!((a, b) { return max(a, b.length); })(0, stringified_grid[rr]));
     }
 
     foreach (row; stringified_grid)
