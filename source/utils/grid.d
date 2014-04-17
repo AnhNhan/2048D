@@ -8,9 +8,13 @@ version(unittest) {
     import std.stdio : writeln;
 }
 
+enum isMatrix(T) = isArray!T && isArray!(ElementType!T);
+
+alias MatrixElement(T) = ElementType!(ElementType!T);
+
 /// This function eagerly rotates a square matrix by 90 degrees clockwise.
-G rotate90CW(G)(G grid)
-    if (isArray!G && isArray!(ElementType!G))
+Matrix rotate90CW(Matrix)(Matrix grid)
+    if (isMatrix!Matrix)
 in
 {
     assert(grid.length);
@@ -20,11 +24,11 @@ in
 }
 body
 {
-    G target;
+    Matrix target;
 
     auto len = grid.length;
 
-    static if (!isStaticArray!G)
+    static if (!isStaticArray!Matrix)
     {
         target.length = len;
         foreach (ref r; target)
@@ -42,8 +46,8 @@ body
     return target;
 }
 
-G rotate90CW(G)(G grid, uint times)
-    if (isArray!G && isArray!(ElementType!G))
+Matrix rotate90CW(Matrix)(Matrix grid, uint times)
+    if (isMatrix!Matrix)
 {
     if (times == 1)
     {
