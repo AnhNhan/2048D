@@ -133,7 +133,8 @@ private:
             return r;
         }
 
-        void loop_grid_iterate(GridType delegate(in GridType, int, int) pure f)
+        pure @safe nothrow
+        void loop_grid_iterate(ref GridType tiles, GridType delegate(in GridType, int, int) pure @safe nothrow f)
         {
             for (int rr = size_y - 1; rr >= 0; --rr)
             {
@@ -147,11 +148,11 @@ private:
             }
         }
 
-        auto loop_loop_grid_iterate_move = { foreach (_; 0.._move_repeat_times) loop_grid_iterate(&move_row_cell); };
+        auto loop_loop_grid_iterate_move = (ref GridType t) { foreach (_; 0.._move_repeat_times) loop_grid_iterate(t, &move_row_cell); };
 
-        loop_loop_grid_iterate_move();
-        loop_grid_iterate(&merge_row_cell);
-        loop_loop_grid_iterate_move();
+        loop_loop_grid_iterate_move(tiles);
+        loop_grid_iterate(tiles, &merge_row_cell);
+        loop_loop_grid_iterate_move(tiles);
 
         // Rotate the tiles again
         static if (direction == MoveDirection.Up)
